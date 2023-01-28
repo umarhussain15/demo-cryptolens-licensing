@@ -1,0 +1,41 @@
+version: "3"
+services:
+  demo-usage:
+    build: .
+    scale: 1
+    hostname: demo-usage
+    environment:
+      CL_PRODUCT_ID: "${CL_PRODUCT_ID}"
+      CL_AUTH_TOKEN: "${CL_AUTH_TOKEN_INCREMENT}"
+      CL_RSA_PUB_KEY: "${CL_RSA_PUB_KEY}"
+      CL_PRODUCT_KEY: "${CL_PRODUCT_KEY}"
+      PORT: "8000"
+    ports:
+      - "9000:8000"
+  demo-quota:
+    build: .
+    scale: 1
+    hostname: demo-quota
+    environment:
+      CL_PRODUCT_ID: "${CL_PRODUCT_ID}"
+      CL_AUTH_TOKEN: "${CL_AUTH_TOKEN_DECREMENT}"
+      CL_RSA_PUB_KEY: "${CL_RSA_PUB_KEY}"
+      CL_PRODUCT_KEY: "${CL_PRODUCT_KEY}"
+      PORT: "8000"
+    ports:
+      - "9001:8000"
+  demo-replicas:
+    build: .
+    scale: 3
+    depends_on:
+      - demo-usage
+      - demo-quota
+    hostname: demo-replicas
+    environment:
+      CL_PRODUCT_ID: "${CL_PRODUCT_ID}"
+      CL_AUTH_TOKEN: "${CL_AUTH_TOKEN_DECREMENT}"
+      CL_RSA_PUB_KEY: "${CL_RSA_PUB_KEY}"
+      CL_PRODUCT_KEY: "${CL_PRODUCT_KEY}"
+      PORT: "8000"
+    ports:
+      - "9004-9100:8000"

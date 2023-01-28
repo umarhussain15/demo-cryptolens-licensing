@@ -1,0 +1,6 @@
+
+fastapi==0.88.0
+uvicorn
+licensing
+python-dotenv
+timeloop
